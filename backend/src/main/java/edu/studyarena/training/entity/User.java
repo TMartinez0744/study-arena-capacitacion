@@ -1,5 +1,4 @@
 package edu.studyarena.training.entity;
-
 import jakarta.persistence.*;
 import java.time.Instant;
 
