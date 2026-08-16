@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Map;
 
+//te rebota si no tenes token
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 

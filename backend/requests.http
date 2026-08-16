@@ -54,3 +54,24 @@ GET http://localhost:8080/api/meetings
 ### Ruta con token
 GET http://localhost:8080/api/meetings
 Authorization: Bearer {{token}}
+
+### Crear reunion
+POST http://localhost:8080/api/meetings
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Repaso de Algebra",
+  "description": "estudio para el primer parcial",
+  "scheduledAt": "2026-09-01T18:00:00Z"
+}
+
+> {% client.global.set("meetingId", response.body.id); %}
+
+### Detalle de la reunion creada
+GET http://localhost:8080/api/meetings/{{meetingId}}
+Authorization: Bearer {{token}}
+
+### Detalle de una reunion inexistente
+GET http://localhost:8080/api/meetings/99999
+Authorization: Bearer {{token}}
