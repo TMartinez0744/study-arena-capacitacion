@@ -1,0 +1,32 @@
+package edu.studyarena.training.dto;
+
+import edu.studyarena.training.entity.Meeting;
+
+import java.time.Instant;
+
+//Lo que se le devuelve al front
+public record MeetingResponse(
+        Long id,
+        String name,
+        String description,
+        Instant scheduledAt,
+        UserResponse creator,
+        Instant createdAt
+) {
+
+    //Pasa la reunion de como esta guardada al formato que sale por la API
+    public static MeetingResponse from(Meeting meeting) {
+        return new MeetingResponse(
+                meeting.getId(),
+                meeting.getName(),
+                meeting.getDescription(),
+                meeting.getScheduledAt(),
+                new UserResponse(
+                        meeting.getCreator().getId(),
+                        meeting.getCreator().getName(),
+                        meeting.getCreator().getEmail()
+                ),
+                meeting.getCreatedAt()
+        );
+    }
+}
