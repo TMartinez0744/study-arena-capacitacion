@@ -1,3 +1,7 @@
 .idea/
 .env
 .env.local
+backend/secrets/
+*.pem
+*.pk
+!backend/src/test/resources/test-jaas.pem
