@@ -75,3 +75,7 @@ Authorization: Bearer {{token}}
 ### Detalle de una reunion inexistente
 GET http://localhost:8080/api/meetings/99999
 Authorization: Bearer {{token}}
+
+### Acceso a la videollamada
+POST http://localhost:8080/api/meetings/{{meetingId}}/access
+Authorization: Bearer {{token}}

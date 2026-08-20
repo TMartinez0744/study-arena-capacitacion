@@ -2,6 +2,7 @@ package edu.studyarena.training.service;
 
 import edu.studyarena.training.dto.CreateMeetingRequest;
 import edu.studyarena.training.dto.MeetingResponse;
+import edu.studyarena.training.dto.VideoConferenceAccess;
 import edu.studyarena.training.entity.Meeting;
 import edu.studyarena.training.entity.User;
 import edu.studyarena.training.exception.MeetingNotFoundException;
@@ -26,11 +27,17 @@ public class MeetingService {
 
     private final MeetingRepository meetingRepository;
     private final UserRepository userRepository;
+    private final VideoConferenceAccessService videoConferenceAccessService;
     private final SecureRandom random = new SecureRandom();
 
-    public MeetingService(MeetingRepository meetingRepository, UserRepository userRepository) {
+    public MeetingService(
+            MeetingRepository meetingRepository,
+            UserRepository userRepository,
+            VideoConferenceAccessService videoConferenceAccessService
+    ) {
         this.meetingRepository = meetingRepository;
         this.userRepository = userRepository;
+        this.videoConferenceAccessService = videoConferenceAccessService;
     }
 
     //Trae todas las reuniones ordenadas por fecha y las pasa al formato de respuesta
@@ -61,6 +68,17 @@ public class MeetingService {
         meeting.setRoomName(generateRoomName(request.name()));
 
         return MeetingResponse.from(meetingRepository.save(meeting));
+    }
+
+    //Busca la reunion y el usuario, y le pide al servicio de video el permiso de entrada
+    public VideoConferenceAccess createAccess(Long meetingId, String email) {
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new MeetingNotFoundException(meetingId));
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email));
+
+        return videoConferenceAccessService.createAccess(meeting, user);
     }
 
     private String generateRoomName(String meetingName) {

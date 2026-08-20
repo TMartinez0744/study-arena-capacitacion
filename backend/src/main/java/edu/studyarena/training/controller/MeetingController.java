@@ -2,6 +2,7 @@ package edu.studyarena.training.controller;
 
 import edu.studyarena.training.dto.CreateMeetingRequest;
 import edu.studyarena.training.dto.MeetingResponse;
+import edu.studyarena.training.dto.VideoConferenceAccess;
 import edu.studyarena.training.service.MeetingService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -46,5 +47,14 @@ public class MeetingController {
         return ResponseEntity
                 .created(URI.create("/api/meetings/" + meeting.id()))
                 .body(meeting);
+    }
+
+    //Se pide justo antes de entrar a la videollamada, porque el token dura pocos minutos
+    @PostMapping("/{id}/access")
+    public ResponseEntity<VideoConferenceAccess> createAccess(
+            @PathVariable Long id,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(meetingService.createAccess(id, authentication.getName()));
     }
 }
